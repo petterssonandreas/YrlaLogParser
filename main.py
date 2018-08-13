@@ -153,7 +153,8 @@ date = datetime.date(2018, 1, 12)
 text = """<!DOCTYPE html>
 <html>
 <head>
-<title>Yrla Log Parser - Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Yrla Log Parser - Results</title>
 </head>
 <body>
 
@@ -162,61 +163,145 @@ text = """<!DOCTYPE html>
     <p>My first paragraph.</p>
 
     <div>
-        <h3>Drives when rented by organizations</h3>
-        <table style="width:500px">
+        <h2>Drives when rented by organizations</h2>
+        <table style="width:700px">
             <tr>
                 <th></th>
                 <th align="left">Date</th>
                 <th align="left">Distance</th>
+                <th align="left">Is member</th>
                 <th align="left">Using towbar</th>
                 <th align="left">Total price</th>
             </tr>
-            <tr style="height:10px">
-            </tr>
-            <tr>
-                <td><b>styret</b></td>
-                <td>2018-06-10</td>
-                <td>25</td>
-                <td>Yes</td>
-                <td>195</td>
-            </tr>
-            <tr>
-                <td>styret@ysektionen.se</td>
-                <td>2018-06-16</td>
-                <td>144</td>
-                <td>Yes</td>
-                <td>1678</td>
-            </tr>
+            """
+
+for renter, drives in organization_drives.items():
+    text += """
             <tr style="height:20px">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="6">
+                    <div class="seperator-row">
+                    </div>
+                </td>
             </tr>
             <tr>
-                <td><b>styret</b></td>
-                <td>2018-06-10</td>
-                <td>25</td>
-                <td>Yes</td>
-                <td>195</td>
-            </tr>
+                <td><b>""" + drives[0].renter.upper() + """</b></td>
+                <td>""" + str(drives[0].date) + """</td>
+                <td align="right">""" + str(drives[0].distance) + """</td>
+                <td align="center">""" + ('Yes' if drives[0].isMember else 'No') + """</td>
+                <td align="center">""" + ('Yes' if drives[0].usingTowbar else 'No') + """</td>
+                <td align="right">""" + str(drives[0].getCost()) + """</td>
+            </tr>"""
+    if len(drives) > 1:
+        text += """
             <tr>
-                <td>styret@ysektionen.se</td>
-                <td>2018-06-16</td>
-                <td>144</td>
-                <td>Yes</td>
-                <td>1678</td>
-            </tr>
+                <td><a href="mailto:""" + drives[1].email + """">""" + drives[1].email + """</a></td>
+                <td>""" + str(drives[1].date) + """</td>
+                <td align="right">""" + str(drives[1].distance) + """</td>
+                <td align="center">""" + ('Yes' if drives[1].isMember else 'No') + """</td>
+                <td align="center">""" + ('Yes' if drives[1].usingTowbar else 'No') + """</td>
+                <td align="right">""" + str(drives[1].getCost()) + """</td>
+            </tr>"""
+        if len(drives) > 2:
+            for drive in drives[2:]:
+                text += """
             <tr>
                 <td></td>
-                <td>2018-06-16</td>
-                <td>144</td>
-                <td>Yes</td>
-                <td>1678</td>
+                <td>""" + str(drive.date) + """</td>
+                <td align="right">""" + str(drive.distance) + """</td>
+                <td align="center">""" + ('Yes' if drive.isMember else 'No') + """</td>
+                <td align="center">""" + ('Yes' if drive.usingTowbar else 'No') + """</td>
+                <td align="right">""" + str(drive.getCost()) + """</td>
+            </tr>"""
+    else:
+        text += """
+            <tr>
+                <td><a href="mailto:""" + drives[0].email + """">""" + drives[0].email + """</a></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>"""
+
+text += """
+            <tr style="height:20px">
+                <td colspan="6">
+                    <div class="seperator-row">
+                    </div>
+                </td>
             </tr>
         </table>
+    </div>
+    <div>
+        <h2>Drives when rented by private persons</h2>
+        <table style="width:700px">
+            <tr>
+                <th></th>
+                <th align="left">Date</th>
+                <th align="left">Distance</th>
+                <th align="left">Is member</th>
+                <th align="left">Using towbar</th>
+                <th align="left">Total price</th>
+            </tr>
+            """
 
+for driver, drives in private_drives.items():
+    text += """
+            <tr style="height:20px" class="seperator-row">
+                <td colspan="6">
+                    <div class="seperator-row">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><b>""" + drives[0].driver.title() + """</b></td>
+                <td>""" + str(drives[0].date) + """</td>
+                <td align="right">""" + str(drives[0].distance) + """</td>
+                <td align="center">""" + ('Yes' if drives[0].isMember else 'No') + """</td>
+                <td align="center">""" + ('Yes' if drives[0].usingTowbar else 'No') + """</td>
+                <td align="right">""" + str(drives[0].getCost()) + """</td>
+            </tr>"""
+    if len(drives) > 1:
+        text += """
+            <tr>
+                <td><a href="mailto:""" + drives[1].email + """">""" + drives[1].email + """</a></td>
+                <td>""" + str(drives[1].date) + """</td>
+                <td align="right">""" + str(drives[1].distance) + """</td>
+                <td align="center">""" + ('Yes' if drives[1].isMember else 'No') + """</td>
+                <td align="center">""" + ('Yes' if drives[1].usingTowbar else 'No') + """</td>
+                <td align="right">""" + str(drives[1].getCost()) + """</td>
+            </tr>"""
+        if len(drives) > 2:
+            for drive in drives[2:]:
+                text += """
+            <tr>
+                <td></td>
+                <td>""" + str(drive.date) + """</td>
+                <td align="right">""" + str(drive.distance) + """</td>
+                <td align="center">""" + ('Yes' if drive.isMember else 'No') + """</td>
+                <td align="center">""" + ('Yes' if drive.usingTowbar else 'No') + """</td>
+                <td align="right">""" + str(drive.getCost()) + """</td>
+            </tr>"""
+    else:
+        text += """
+            <tr>
+                <td><a href="mailto:""" + drives[0].email + """">""" + drives[0].email + """</a></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>"""
+
+text += """
+            <tr style="height:20px">
+                <td colspan="6">
+                    <div class="seperator-row">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>"""
 

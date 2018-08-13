@@ -1,0 +1,15 @@
+p {
+    color: red
+}
+
+.email {
+    color: blue;
+    text-decoration: underline;
+}
+
+.seperator-row {
+    /*background-color: black;*/
+    border-bottom-width: 1px;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+}

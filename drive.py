@@ -20,3 +20,15 @@ class Drive:
         print("Email:\t\t", self.email)
         print("Member:\t\t", self.isMember)
         print("Using towbar:\t", self.usingTowbar)
+
+    def getCost(self):
+        cost = 0
+        if self.isMember:
+            cost += self.distance * 3.5
+        else:
+            cost += self.distance * 5
+        
+        if self.usingTowbar:
+            cost += 50
+
+        return cost

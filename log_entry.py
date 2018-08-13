@@ -2,7 +2,19 @@
 import datetime
 
 class LogEntry:
-    def __init__(self, log_line):
+    def __init__(self, log_line=None):
+        if not log_line:
+            self.timestamp = datetime.datetime(1971,1,1,0,0,0)
+            self.driver = ''
+            self.isMember = False
+            self.date = datetime.date(1971,1,1)
+            self.meter = 0
+            self.renter = ''
+            self.isStarting = False
+            self.email = ''
+            self.usingTowbar = False
+            return
+
         # Get time
         date_and_time = log_line[0].split()
         date = date_and_time[0].split('-')

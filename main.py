@@ -1,11 +1,13 @@
-
+import datetime
 import re
 from log_entry import LogEntry
 from drive import Drive
+import webbrowser
 
 # Get data, split over lines
-file_source = open("yrla_logg.txt")
-source_lines = file_source.read().splitlines()
+source_file = open("yrla_logg.txt", 'r')
+source_lines = source_file.read().splitlines()
+source_file.close()
 
 # Remove trailing \n and \t
 for i in range(len(source_lines)):
@@ -20,8 +22,9 @@ for line in source_lines:
     entry = LogEntry(re.split(r'\t+', line))
     log_entries.append(entry)
 
-# Sort all entries based on meter value
-log_entries.sort(key = lambda entry: entry.meter)
+# Sort all entries based on meter value, and if equal, if drive is starting or ending
+# Should produce a list with rising meter values, and ending drives before starting if meter value equal
+log_entries.sort(key = lambda entry: (entry.meter, entry.isStarting))
 
 '''for entry in log_entries:
     entry.printEntry()
@@ -31,12 +34,12 @@ log_entries.sort(key = lambda entry: entry.meter)
 organization_drives = {}
 private_drives = {}
 drive_is_started = False
-start_entry = None
-end_entry = None
+start_entry = LogEntry()
+end_entry = LogEntry()
 for entry in log_entries:
     if (not drive_is_started) and entry.isStarting:
         # No drive started, and next isStarting == True
-        start_entry = entry
+        start_entry.copyValues(entry)
         drive_is_started = True
 
     elif (not drive_is_started) and (not entry.isStarting) and end_entry:
@@ -80,7 +83,7 @@ for entry in log_entries:
                 continue
 
         # End drive
-        end_entry = entry
+        end_entry.copyValues(entry)
         drive = Drive(start_entry, end_entry)
         if drive.renter in ['privat', 'Privat', 'PRIVAT']:
             if drive.driver in private_drives:
@@ -144,3 +147,84 @@ for renter, drives in organization_drives.items():
         drive.printDrive()
     print('---------')
 print('************************')
+
+date = datetime.date(2018, 1, 12)
+
+text = """<!DOCTYPE html>
+<html>
+<head>
+<title>Yrla Log Parser - Results</title>
+</head>
+<body>
+
+    <h1>Yrla Log Parser - Results</h1>
+    <h3>For dates: """ + str(date) + """</h3>
+    <p>My first paragraph.</p>
+
+    <div>
+        <h3>Drives when rented by organizations</h3>
+        <table style="width:500px">
+            <tr>
+                <th></th>
+                <th align="left">Date</th>
+                <th align="left">Distance</th>
+                <th align="left">Using towbar</th>
+                <th align="left">Total price</th>
+            </tr>
+            <tr style="height:10px">
+            </tr>
+            <tr>
+                <td><b>styret</b></td>
+                <td>2018-06-10</td>
+                <td>25</td>
+                <td>Yes</td>
+                <td>195</td>
+            </tr>
+            <tr>
+                <td>styret@ysektionen.se</td>
+                <td>2018-06-16</td>
+                <td>144</td>
+                <td>Yes</td>
+                <td>1678</td>
+            </tr>
+            <tr style="height:20px">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>styret</b></td>
+                <td>2018-06-10</td>
+                <td>25</td>
+                <td>Yes</td>
+                <td>195</td>
+            </tr>
+            <tr>
+                <td>styret@ysektionen.se</td>
+                <td>2018-06-16</td>
+                <td>144</td>
+                <td>Yes</td>
+                <td>1678</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>2018-06-16</td>
+                <td>144</td>
+                <td>Yes</td>
+                <td>1678</td>
+            </tr>
+        </table>
+
+</body>
+</html>"""
+
+
+result_file = open('yrla_drives.html', 'w')
+result_file.write(text)
+
+webbrowser.open_new_tab('yrla_drives.html')
+
+
+result_file.close()

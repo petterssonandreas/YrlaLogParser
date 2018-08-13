@@ -154,6 +154,7 @@ text = """<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="ysektionen.ico">
     <title>Yrla Log Parser - Results</title>
 </head>
 <body>

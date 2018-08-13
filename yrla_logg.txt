@@ -1,0 +1,20 @@
+Tidstämpel	Vem hyr bilen?	Är personen sektionsmedlem?	När kör du?	Vad står mätaren på nu?	Vem kör du för?	Har körningen avslutats eller påbörjats?	Mail till den som ska betala	Används dragkrok
+2017-11-14 20:01:32	Carolin Svensson	Ja	2017-11-14	161112	LINK	Påbörjats	per.gustavsson@linkdagarna.se	Nej
+2017-11-14 20:02:27	Carolin Svensson	Ja	2017-11-14	161122	LINK	Avslutats	per.gustavsson@linkdagarna.se	Nej
+2017-11-16 12:24:23	Carolin Svensson	Ja	2017-11-14	161082	LINK	Påbörjats	per.gustavsson@linkdagarna.se	Nej
+2017-11-16 12:28:10	Carolin Svensson	Ja	2017-11-14	161096	LINK	Avslutats	per.gustavsson@linkdagarna.se	Nej
+2017-11-17 12:29:26	Gustav Malmström	Ja	2017-11-17	161151	ESN Linköping	Påbörjats	treasurer@esnlinkoping.org	Nej
+2017-11-17 12:29:26	Gustav Malmström	Ja	2017-11-17	161163	ESN Linköping	Avslutats	treasurer@esnlinkoping.org	Nej
+2017-11-17 17:15:00	Adam Arques	ja	2017-11-17	161163	YMV	Påbörjats	skattmastare@ysektionen.se	Nej
+2017-11-17 19:50:00	Adam Arques	ja	2017-11-17	161251	YMV	Avslutats	skattmastare@ysektionen.se	Nej
+2017-11-19 07:52:31	Gustav Malmström	Ja	2017-11-19	161251	Privat	Påbörjats	treasurer@esnlikoping.org	Ja
+2017-11-19 07:52:31	Gustav Malmström	Ja	2017-11-19	161277	Privat	Avslutats	treasurer@esnlikoping.org	Ja
+2017-11-19 16:15:12	Elin Axberg	Ja	2017-11-13	161043	Privat	Påbörjats	eliax551@gmail.com	Nej
+2017-11-19 16:16:02	Elin Axberg	Ja	2017-11-13	161068	Privat	Avslutats	eliax551@gmail.com	Nej
+2017-11-19 16:23:57	Marina Baric	Ja	2017-11-16	161142	Privat	Avslutats	Marba	Nej
+2017-11-19 16:25:12	Lovisa Jansson	Ja	2017-11-16	161142	Styret	Påbörjats	Skattmastare@ysektionen.se	Nej
+2017-11-19 16:26:05	Lovisa Jansson	Ja	2017-11-16	161151	Styret	Avslutats	Skattmastare@ysektionen.se	Nej
+2017-11-19 19:37:44	Lovisa Jansson	Ja	2017-11-16	161151	Styret	Avslutats	Skattmastare@ysektionen.se	Nej
+2017-11-27 21:05:27	Carolin Svensson	Ja	2017-11-27	161300	LINK	Avslutats	Per.gustavsson@linkdagarna.se	Ja
+2017-12-02 10:50:24	Per Gustavsson	Ja	2017-11-29	161300	LINK	Påbörjats	per.gustavsson@linkdagarna.se	Ja
+2017-12-02 10:51:25	Per Gustavsson	Ja	2017-12-01	161557	LINK	Avslutats	per.gustavsson@linkdagarna.se	Ja

@@ -3,7 +3,45 @@ import re
 from log_entry import LogEntry
 from drive import Drive
 import webbrowser
+import sys
 
+
+'''
+Interpret command line arguments, if present.
+'''
+from_date = None
+until_date = None
+
+if len(sys.argv) > 1:
+    # Possible from-date
+    data = str(sys.argv[1]).split('-')
+    if len(data) == 3:
+        # Assume date on form YYYY-MM-DD
+        from_date = datetime.date(int(data[0]), int(data[1]), int(data[2]))
+    elif len(data) == 1 and len(data[0]) == 6:
+        # Assume 6 digits, YYMMDD
+        from_date = datetime.date(int('20' + data[0][0:2]), int(data[0][2:4]), int(data[0][4:6]))
+
+    if len(sys.argv) > 2:
+        # Possible until-date
+        data = str(sys.argv[2]).split('-')
+        if len(data) == 3:
+            # Assume date on form YYYY-MM-DD
+            until_date = datetime.date(int(data[0]), int(data[1]), int(data[2]))
+        elif len(data) == 1 and len(data[0]) == 6:
+            # Assume 6 digits, YYMMDD
+            until_date = datetime.date(int('20' + data[0][0:2]), int(data[0][2:4]), int(data[0][4:6]))
+        
+        if until_date:
+            if until_date < from_date:
+                # until_date before from_date, invalid, use only from_date
+                until_date = None
+                print('Invalid date interval given, only using first date as start date.')
+
+
+'''
+Analyze data
+'''
 # Get data, split over lines
 source_file = open("yrla_logg.txt", 'r')
 source_lines = source_file.read().splitlines()
@@ -26,7 +64,11 @@ for line in source_lines:
 # Should produce a list with rising meter values, and ending drives before starting if meter value equal
 log_entries.sort(key = lambda entry: (entry.meter, entry.isStarting))
 
-'''for entry in log_entries:
+# Remove entries outside of from-until interval
+log_entries = [entry for entry in log_entries if entry.dateInInterval(from_date, until_date)]
+
+'''
+for entry in log_entries:
     entry.printEntry()
     print('')'''
 
@@ -129,7 +171,7 @@ for entry in log_entries:
         print("The current entry:")
         entry.printEntry()
 
-
+'''
 print('************************')
 # Done getting all drives
 for driver, drives in private_drives.items():
@@ -147,8 +189,22 @@ for renter, drives in organization_drives.items():
         drive.printDrive()
     print('---------')
 print('************************')
+'''
 
 date = datetime.date(2018, 1, 12)
+
+date_str = ''
+if not from_date:
+    from_date = log_entries[0].date
+if not until_date:
+    until_date = log_entries[len(log_entries) - 1].date
+
+if from_date and until_date:
+    date_str += str(from_date) + ' ' + chr(8211) + ' ' + str(until_date)
+elif from_date:
+    date_str += str(from_date) + ' ' + chr(8211)
+elif until_date:
+    date_str += chr(8211) + ' ' + str(until_date)
 
 text = """<!DOCTYPE html>
 <html>
@@ -160,7 +216,7 @@ text = """<!DOCTYPE html>
 <body>
 
     <h1>Yrla Log Parser - Results</h1>
-    <h3>For dates: """ + str(date) + """</h3>
+    <h3>For dates: """ + date_str + """</h3>
     <p>My first paragraph.</p>
 
     <div>

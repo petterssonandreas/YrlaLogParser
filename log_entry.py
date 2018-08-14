@@ -67,3 +67,14 @@ class LogEntry:
         print("Starting:\t", self.isStarting)
         print("Email:\t\t", self.email)
         print("Using towbar:\t", self.usingTowbar)
+
+    def dateInInterval(self, from_date, until_date):
+        if from_date:
+            if self.date < from_date:
+                # Before from_date
+                return False
+        if until_date:
+            if self.date > until_date:
+                # After until_date
+                return False
+        return True

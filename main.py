@@ -4,6 +4,7 @@ from log_entry import LogEntry
 from drive import Drive
 import webbrowser
 import sys
+import google_spreadsheet
 
 
 '''
@@ -40,24 +41,22 @@ if len(sys.argv) > 1:
 
 
 '''
-Analyze data
+Get and analyze data
 '''
-# Get data, split over lines
-source_file = open("yrla_logg.txt", 'r')
-source_lines = source_file.read().splitlines()
-source_file.close()
+# Get data
+spreadsheetData = google_spreadsheet.getSpreadsheetData()
+header_line = google_spreadsheet.getSpreadsheetHeader()
 
-# Remove trailing \n and \t
-for i in range(len(source_lines)):
-    source_lines[i] = source_lines[i].strip().lower()
+# Use only lowercase
+spreadsheetData = [[cell.lower() for cell in row] for row in spreadsheetData]
 
-# Extract and remove header line
-header_line = source_lines.pop(0)
+for row in spreadsheetData:
+    print(row)
 
 # Get all entries
 log_entries = []
-for line in source_lines:
-    entry = LogEntry(re.split(r'\t+', line))
+for row in spreadsheetData:
+    entry = LogEntry(row)
     log_entries.append(entry)
 
 # Sort all entries based on meter value, and if equal, if drive is starting or ending
@@ -221,14 +220,20 @@ text = """<!DOCTYPE html>
 
     <div>
         <h2>Drives when rented by organizations</h2>
-        <table style="width:700px">
+        <table>
+            <col width="300">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
             <tr>
                 <th></th>
                 <th align="left">Date</th>
-                <th align="left">Distance</th>
-                <th align="left">Is member</th>
-                <th align="left">Using towbar</th>
-                <th align="left">Total price</th>
+                <th align="right">Distance</th>
+                <th align="right">Is member</th>
+                <th align="right">Using towbar</th>
+                <th align="right">Total price</th>
             </tr>
             """
 
@@ -244,8 +249,8 @@ for renter, drives in organization_drives.items():
                 <td><b>""" + drives[0].renter.upper() + """</b></td>
                 <td>""" + str(drives[0].date) + """</td>
                 <td align="right">""" + str(drives[0].distance) + """</td>
-                <td align="center">""" + ('Yes' if drives[0].isMember else 'No') + """</td>
-                <td align="center">""" + ('Yes' if drives[0].usingTowbar else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[0].isMember else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[0].usingTowbar else 'No') + """</td>
                 <td align="right">""" + str(drives[0].getCost()) + """</td>
             </tr>"""
     if len(drives) > 1:
@@ -254,8 +259,8 @@ for renter, drives in organization_drives.items():
                 <td><a href="mailto:""" + drives[1].email + """">""" + drives[1].email + """</a></td>
                 <td>""" + str(drives[1].date) + """</td>
                 <td align="right">""" + str(drives[1].distance) + """</td>
-                <td align="center">""" + ('Yes' if drives[1].isMember else 'No') + """</td>
-                <td align="center">""" + ('Yes' if drives[1].usingTowbar else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[1].isMember else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[1].usingTowbar else 'No') + """</td>
                 <td align="right">""" + str(drives[1].getCost()) + """</td>
             </tr>"""
         if len(drives) > 2:
@@ -265,8 +270,8 @@ for renter, drives in organization_drives.items():
                 <td></td>
                 <td>""" + str(drive.date) + """</td>
                 <td align="right">""" + str(drive.distance) + """</td>
-                <td align="center">""" + ('Yes' if drive.isMember else 'No') + """</td>
-                <td align="center">""" + ('Yes' if drive.usingTowbar else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drive.isMember else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drive.usingTowbar else 'No') + """</td>
                 <td align="right">""" + str(drive.getCost()) + """</td>
             </tr>"""
     else:
@@ -292,13 +297,19 @@ text += """
     <div>
         <h2>Drives when rented by private persons</h2>
         <table style="width:700px">
+            <col width="300">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="80">
             <tr>
                 <th></th>
                 <th align="left">Date</th>
-                <th align="left">Distance</th>
-                <th align="left">Is member</th>
-                <th align="left">Using towbar</th>
-                <th align="left">Total price</th>
+                <th align="right">Distance</th>
+                <th align="right">Is member</th>
+                <th align="right">Using towbar</th>
+                <th align="right">Total price</th>
             </tr>
             """
 
@@ -314,8 +325,8 @@ for driver, drives in private_drives.items():
                 <td><b>""" + drives[0].driver.title() + """</b></td>
                 <td>""" + str(drives[0].date) + """</td>
                 <td align="right">""" + str(drives[0].distance) + """</td>
-                <td align="center">""" + ('Yes' if drives[0].isMember else 'No') + """</td>
-                <td align="center">""" + ('Yes' if drives[0].usingTowbar else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[0].isMember else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[0].usingTowbar else 'No') + """</td>
                 <td align="right">""" + str(drives[0].getCost()) + """</td>
             </tr>"""
     if len(drives) > 1:
@@ -324,8 +335,8 @@ for driver, drives in private_drives.items():
                 <td><a href="mailto:""" + drives[1].email + """">""" + drives[1].email + """</a></td>
                 <td>""" + str(drives[1].date) + """</td>
                 <td align="right">""" + str(drives[1].distance) + """</td>
-                <td align="center">""" + ('Yes' if drives[1].isMember else 'No') + """</td>
-                <td align="center">""" + ('Yes' if drives[1].usingTowbar else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[1].isMember else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drives[1].usingTowbar else 'No') + """</td>
                 <td align="right">""" + str(drives[1].getCost()) + """</td>
             </tr>"""
         if len(drives) > 2:
@@ -335,8 +346,8 @@ for driver, drives in private_drives.items():
                 <td></td>
                 <td>""" + str(drive.date) + """</td>
                 <td align="right">""" + str(drive.distance) + """</td>
-                <td align="center">""" + ('Yes' if drive.isMember else 'No') + """</td>
-                <td align="center">""" + ('Yes' if drive.usingTowbar else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drive.isMember else 'No') + """</td>
+                <td align="right">""" + ('Yes' if drive.usingTowbar else 'No') + """</td>
                 <td align="right">""" + str(drive.getCost()) + """</td>
             </tr>"""
     else:

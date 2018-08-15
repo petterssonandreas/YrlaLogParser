@@ -18,7 +18,7 @@ class LogEntry:
         # Get time
         date_and_time = log_line[0].split()
         date = date_and_time[0].split('-')
-        time = date_and_time[1].split(':')
+        time = date_and_time[1].split('.')
         self.timestamp = datetime.datetime(int(date[0]), int(date[1]), int(date[2]), int(time[0]), int(time[1]), int(time[2]))
 
         # Get driver name
